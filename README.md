@@ -15,15 +15,9 @@
 
 # hypertune
 
-Engine for ML/Data tracking, visualization, and dashboards for Polyaxon.
+A library for performing hyperparameter optimization.
 
 ## Install
-
-```bash
-pip install hypertune
-```
-
-If you would like to use the tracking features, you need to install `polyaxon` as well:
 
 ```bash
 pip install polyaxon hypertune
