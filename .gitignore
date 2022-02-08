@@ -1,8 +1,10 @@
+.pytest_cache/
 # Byte-compiled / optimized / DLL files
 __pycache__/
-.pytest_cache/
 *.py[cod]
 *$py.class
+.mypy_cache/
+.vscode/
 
 # temp files
 *~
@@ -15,7 +17,9 @@ __pycache__/
 docker/environment/
 build/
 develop-eggs/
+tsconfig.tsbuildinfo
 dist/
+pydist/
 downloads/
 eggs/
 .eggs/
@@ -101,30 +105,72 @@ ENV/
 # data
 big_data/
 examples/data/
-
-# project
-setup.log
-static/
-reports/
-logs/
-media/
 data/
 
 # environment vars
-polyaxon/polyaxon/env_vars/local.json
+local.json
 
 # project
-logs/*
-static/debug_toolbar
-static/rest_framework
+logs/
+/wheels/*
+setup.log
+reports/
+media/
+/**/static/debug_toolbar
+/**/static/rest_framework
+/**/static/css
 
 # npm modules and transpiled typescript files
 client/dist/
 client/node_modules/
-client/css/
-client/polyaxon/**/*.js
-client/polyaxon/**/*.js.map
-/examples/polyaxon-logs/
+client/packages/sdk/dist/
+client/packages/sdk/src/
+client/packages/ui/dist/
+client/packages/ui/lib/
+client/packages/ui/es/
+client/packages/ui/test-env/
+client/packages/ui/types/
+client/packages/ui/ui.d.ts
+client/**/node_modules/
 client/npm-debug.log
+deploy/dist/
+deploy/node_modules/
+deploy/npm-debug.log
+/examples/polyaxon-logs/
+wip/
+
 # don't ignore static dist
-!/static/dist
+!static/v1/dist
+lastfailed
+
+# Ignore local.env.ts
+dev.env.ts
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+bin
+
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Kubernetes Generated files - skip generated files, except for vendored files
+
+!vendor/**/zz_generated.*
+client/.awcache/
+
+
+# ignore dev/test values
+values.*.dev.yaml
+values.*.test.yaml
+values.*.test.json
+values.*.test.sh
+
+# Chart dependencies
+**/charts/*.tgz
