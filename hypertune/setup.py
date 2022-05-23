@@ -103,7 +103,7 @@ setup(
         "optimization",
         "bayesian-optimization",
     ],
-    install_requires=["numpy"],
+    install_requires=[],
     extras_require=extra,
     python_requires=">=3.5",
     classifiers=[
