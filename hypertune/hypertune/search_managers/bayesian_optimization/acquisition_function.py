@@ -125,9 +125,13 @@ class UtilityFunction:
                 continue
 
             # Store it if better than previous minimum(maximum).
-            if max_acq is None or -res.fun[0] >= max_acq:
+            if isinstance(res.fun, list):
+                result = -res.fun[0]
+            else:
+                result = -res.fun
+            if max_acq is None or result >= max_acq:
                 x_max = res.x
-                max_acq = -res.fun[0]
+                max_acq = result
 
         # Clip output to make sure it lies within the bounds. Due to floating
         # point technicalities this is not always the case.
