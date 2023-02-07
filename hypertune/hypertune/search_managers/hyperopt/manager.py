@@ -86,7 +86,6 @@ class HyperoptManager(BaseManager):
             )
 
             for param in observation_config:
-
                 observation_value = observation_config[param]
                 if param in self._param_to_value:
                     index_of_value = space_get_index(
