@@ -14,12 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import copy
 import numpy as np
 
 from datetime import date, datetime
 
-from marshmallow import ValidationError
+from pydantic import ValidationError
 
 from hypertune.matrix import dist
 from polyaxon.polyflow import (
@@ -74,225 +73,238 @@ def space_get_index(array, value):
 def dist_sample(fct, value, size, rand_generator):
     size = None if size == 1 else size
     rand_generator = rand_generator or np.random
-    value = copy.deepcopy(value)
     value["size"] = size
     value["rand_generator"] = rand_generator
     return fct(**value)
 
 
 def get_length(matrix):
-    if matrix.IDENTIFIER == V1HpChoice.IDENTIFIER:
+    if matrix._IDENTIFIER == V1HpChoice._IDENTIFIER:
         return len(matrix.value)
 
-    if matrix.IDENTIFIER == V1HpPChoice.IDENTIFIER:
+    if matrix._IDENTIFIER == V1HpPChoice._IDENTIFIER:
         return len(matrix.value)
 
-    if matrix.IDENTIFIER == V1HpDateRange.IDENTIFIER:
-        return len(np.arange(**matrix.value))
+    if matrix._IDENTIFIER == V1HpDateRange._IDENTIFIER:
+        return len(np.arange(**matrix.value.to_dict()))
 
-    if matrix.IDENTIFIER == V1HpDateTimeRange.IDENTIFIER:
-        return len(np.arange(**matrix.value))
+    if matrix._IDENTIFIER == V1HpDateTimeRange._IDENTIFIER:
+        return len(np.arange(**matrix.value.to_dict()))
 
-    if matrix.IDENTIFIER == V1HpRange.IDENTIFIER:
-        return len(np.arange(**matrix.value))
+    if matrix._IDENTIFIER == V1HpRange._IDENTIFIER:
+        return len(np.arange(**matrix.value.to_dict()))
 
-    if matrix.IDENTIFIER == V1HpLinSpace.IDENTIFIER:
-        return len(np.linspace(**matrix.value))
+    if matrix._IDENTIFIER == V1HpLinSpace._IDENTIFIER:
+        return len(np.linspace(**matrix.value.to_dict()))
 
-    if matrix.IDENTIFIER == V1HpLogSpace.IDENTIFIER:
-        return len(np.logspace(**matrix.value))
+    if matrix._IDENTIFIER == V1HpLogSpace._IDENTIFIER:
+        return len(np.logspace(**matrix.value.to_dict()))
 
-    if matrix.IDENTIFIER == V1HpGeomSpace.IDENTIFIER:
-        return len(np.geomspace(**matrix.value))
+    if matrix._IDENTIFIER == V1HpGeomSpace._IDENTIFIER:
+        return len(np.geomspace(**matrix.value.to_dict()))
 
-    if matrix.IDENTIFIER in {
-        V1HpUniform.IDENTIFIER,
-        V1HpQUniform.IDENTIFIER,
-        V1HpLogUniform.IDENTIFIER,
-        V1HpQLogUniform.IDENTIFIER,
-        V1HpNormal.IDENTIFIER,
-        V1HpQNormal.IDENTIFIER,
-        V1HpLogNormal.IDENTIFIER,
-        V1HpQLogNormal.IDENTIFIER,
+    if matrix._IDENTIFIER in {
+        V1HpUniform._IDENTIFIER,
+        V1HpQUniform._IDENTIFIER,
+        V1HpLogUniform._IDENTIFIER,
+        V1HpQLogUniform._IDENTIFIER,
+        V1HpNormal._IDENTIFIER,
+        V1HpQNormal._IDENTIFIER,
+        V1HpLogNormal._IDENTIFIER,
+        V1HpQLogNormal._IDENTIFIER,
     }:
-        raise ValidationError("Distribution should not call `length`")
+        raise ValidationError(
+            ["Distribution should not call `length`"], matrix.__class__
+        )
 
 
 def get_min(matrix):
-    if matrix.IDENTIFIER == V1HpChoice.IDENTIFIER:
+    if matrix._IDENTIFIER == V1HpChoice._IDENTIFIER:
         if matrix.is_categorical:
             return None
         return min(to_numpy(matrix))
 
-    if matrix.IDENTIFIER == V1HpPChoice.IDENTIFIER:
+    if matrix._IDENTIFIER == V1HpPChoice._IDENTIFIER:
         return None
 
-    if matrix.IDENTIFIER in {
-        V1HpDateRange.IDENTIFIER,
-        V1HpDateTimeRange.IDENTIFIER,
-        V1HpRange.IDENTIFIER,
-        V1HpLinSpace.IDENTIFIER,
-        V1HpLogSpace.IDENTIFIER,
-        V1HpGeomSpace.IDENTIFIER,
+    if matrix._IDENTIFIER in {
+        V1HpDateRange._IDENTIFIER,
+        V1HpDateTimeRange._IDENTIFIER,
+        V1HpRange._IDENTIFIER,
+        V1HpLinSpace._IDENTIFIER,
+        V1HpLogSpace._IDENTIFIER,
+        V1HpGeomSpace._IDENTIFIER,
     }:
-        return matrix.value.get("start")
+        return matrix.value.start
 
-    if matrix.IDENTIFIER == V1HpUniform.IDENTIFIER:
-        return matrix.value.get("low")
+    if matrix._IDENTIFIER == V1HpUniform._IDENTIFIER:
+        return matrix.value.low
 
-    if matrix.IDENTIFIER in {
-        V1HpQUniform.IDENTIFIER,
-        V1HpLogUniform.IDENTIFIER,
-        V1HpQLogUniform.IDENTIFIER,
-        V1HpNormal.IDENTIFIER,
-        V1HpQNormal.IDENTIFIER,
-        V1HpLogNormal.IDENTIFIER,
-        V1HpQLogNormal.IDENTIFIER,
+    if matrix._IDENTIFIER in {
+        V1HpQUniform._IDENTIFIER,
+        V1HpLogUniform._IDENTIFIER,
+        V1HpQLogUniform._IDENTIFIER,
+        V1HpNormal._IDENTIFIER,
+        V1HpQNormal._IDENTIFIER,
+        V1HpLogNormal._IDENTIFIER,
+        V1HpQLogNormal._IDENTIFIER,
     }:
         return None
 
 
 def get_max(matrix):
-    if matrix.IDENTIFIER == V1HpChoice.IDENTIFIER:
+    if matrix._IDENTIFIER == V1HpChoice._IDENTIFIER:
         if matrix.is_categorical:
             return None
         return max(to_numpy(matrix))
 
-    if matrix.IDENTIFIER == V1HpPChoice.IDENTIFIER:
+    if matrix._IDENTIFIER == V1HpPChoice._IDENTIFIER:
         return None
 
-    if matrix.IDENTIFIER in {
-        V1HpDateRange.IDENTIFIER,
-        V1HpDateTimeRange.IDENTIFIER,
-        V1HpRange.IDENTIFIER,
-        V1HpLinSpace.IDENTIFIER,
-        V1HpLogSpace.IDENTIFIER,
-        V1HpGeomSpace.IDENTIFIER,
+    if matrix._IDENTIFIER in {
+        V1HpDateRange._IDENTIFIER,
+        V1HpDateTimeRange._IDENTIFIER,
+        V1HpRange._IDENTIFIER,
+        V1HpLinSpace._IDENTIFIER,
+        V1HpLogSpace._IDENTIFIER,
+        V1HpGeomSpace._IDENTIFIER,
     }:
-        return matrix.value.get("stop")
+        return matrix.value.stop
 
-    if matrix.IDENTIFIER == V1HpUniform.IDENTIFIER:
-        return matrix.value.get("high")
+    if matrix._IDENTIFIER == V1HpUniform._IDENTIFIER:
+        return matrix.value.high
 
-    if matrix.IDENTIFIER in {
-        V1HpQUniform.IDENTIFIER,
-        V1HpLogUniform.IDENTIFIER,
-        V1HpQLogUniform.IDENTIFIER,
-        V1HpNormal.IDENTIFIER,
-        V1HpQNormal.IDENTIFIER,
-        V1HpLogNormal.IDENTIFIER,
-        V1HpQLogNormal.IDENTIFIER,
+    if matrix._IDENTIFIER in {
+        V1HpQUniform._IDENTIFIER,
+        V1HpLogUniform._IDENTIFIER,
+        V1HpQLogUniform._IDENTIFIER,
+        V1HpNormal._IDENTIFIER,
+        V1HpQNormal._IDENTIFIER,
+        V1HpLogNormal._IDENTIFIER,
+        V1HpQLogNormal._IDENTIFIER,
     }:
         return None
 
 
 def to_numpy(matrix):
-    if matrix.IDENTIFIER == V1HpChoice.IDENTIFIER:
+    if matrix._IDENTIFIER == V1HpChoice._IDENTIFIER:
         return matrix.value
 
-    if matrix.IDENTIFIER == V1HpPChoice.IDENTIFIER:
-        raise ValidationError(
-            "Distribution should not call `to_numpy`, "
-            "instead it should call `sample`."
+    if matrix._IDENTIFIER == V1HpPChoice._IDENTIFIER:
+        raise ValidationError(  # TODO: Fix error message
+            [
+                "Distribution should not call `to_numpy`, "
+                "instead it should call `sample`."
+            ],
+            matrix.__class__,
         )
 
-    if matrix.IDENTIFIER == V1HpDateRange.IDENTIFIER:
-        return np.arange(**matrix.value).astype(date)
+    if matrix._IDENTIFIER == V1HpDateRange._IDENTIFIER:
+        return np.arange(**matrix.value.to_dict()).astype(date)
 
-    if matrix.IDENTIFIER == V1HpDateTimeRange.IDENTIFIER:
-        return np.arange(**matrix.value).astype(datetime)
+    if matrix._IDENTIFIER == V1HpDateTimeRange._IDENTIFIER:
+        return np.arange(**matrix.value.to_dict()).astype(datetime)
 
-    if matrix.IDENTIFIER == V1HpRange.IDENTIFIER:
-        return np.arange(**matrix.value)
+    if matrix._IDENTIFIER == V1HpRange._IDENTIFIER:
+        return np.arange(**matrix.value.to_dict())
 
-    if matrix.IDENTIFIER == V1HpLinSpace.IDENTIFIER:
-        return np.linspace(**matrix.value)
+    if matrix._IDENTIFIER == V1HpLinSpace._IDENTIFIER:
+        return np.linspace(**matrix.value.to_dict())
 
-    if matrix.IDENTIFIER == V1HpLogSpace.IDENTIFIER:
-        return np.logspace(**matrix.value)
+    if matrix._IDENTIFIER == V1HpLogSpace._IDENTIFIER:
+        return np.logspace(**matrix.value.to_dict())
 
-    if matrix.IDENTIFIER == V1HpGeomSpace.IDENTIFIER:
-        return np.geomspace(**matrix.value)
+    if matrix._IDENTIFIER == V1HpGeomSpace._IDENTIFIER:
+        return np.geomspace(**matrix.value.to_dict())
 
-    if matrix.IDENTIFIER in {
-        V1HpUniform.IDENTIFIER,
-        V1HpQUniform.IDENTIFIER,
-        V1HpLogUniform.IDENTIFIER,
-        V1HpQLogUniform.IDENTIFIER,
-        V1HpNormal.IDENTIFIER,
-        V1HpQNormal.IDENTIFIER,
-        V1HpLogNormal.IDENTIFIER,
-        V1HpQLogNormal.IDENTIFIER,
+    if matrix._IDENTIFIER in {
+        V1HpUniform._IDENTIFIER,
+        V1HpQUniform._IDENTIFIER,
+        V1HpLogUniform._IDENTIFIER,
+        V1HpQLogUniform._IDENTIFIER,
+        V1HpNormal._IDENTIFIER,
+        V1HpQNormal._IDENTIFIER,
+        V1HpLogNormal._IDENTIFIER,
+        V1HpQLogNormal._IDENTIFIER,
     }:
         raise ValidationError(
-            "Distribution should not call `to_numpy`, "
-            "instead it should call `sample`."
+            [
+                "Distribution should not call `to_numpy`, "
+                "instead it should call `sample`."
+            ],
+            matrix.__class__,
         )
 
 
 def _sample(matrix, size=None, rand_generator=None):
     size = None if size == 1 else size
 
-    if matrix.IDENTIFIER == V1HpChoice.IDENTIFIER:
+    if matrix._IDENTIFIER == V1HpChoice._IDENTIFIER:
         return space_sample(
             value=to_numpy(matrix), size=size, rand_generator=rand_generator
         )
-    if matrix.IDENTIFIER == V1HpPChoice.IDENTIFIER:
+    if matrix._IDENTIFIER == V1HpPChoice._IDENTIFIER:
         return pchoice(values=matrix.value, size=size, rand_generator=rand_generator)
 
-    if matrix.IDENTIFIER == V1HpDateRange.IDENTIFIER:
+    if matrix._IDENTIFIER == V1HpDateRange._IDENTIFIER:
         return space_sample(
             value=to_numpy(matrix), size=size, rand_generator=rand_generator
         )
 
-    if matrix.IDENTIFIER == V1HpDateTimeRange.IDENTIFIER:
+    if matrix._IDENTIFIER == V1HpDateTimeRange._IDENTIFIER:
         return space_sample(
             value=to_numpy(matrix), size=size, rand_generator=rand_generator
         )
 
-    if matrix.IDENTIFIER == V1HpRange.IDENTIFIER:
+    if matrix._IDENTIFIER == V1HpRange._IDENTIFIER:
         return space_sample(
             value=to_numpy(matrix), size=size, rand_generator=rand_generator
         )
 
-    if matrix.IDENTIFIER == V1HpLinSpace.IDENTIFIER:
+    if matrix._IDENTIFIER == V1HpLinSpace._IDENTIFIER:
         return space_sample(
             value=to_numpy(matrix), size=size, rand_generator=rand_generator
         )
 
-    if matrix.IDENTIFIER == V1HpLogSpace.IDENTIFIER:
+    if matrix._IDENTIFIER == V1HpLogSpace._IDENTIFIER:
         return space_sample(
             value=to_numpy(matrix), size=size, rand_generator=rand_generator
         )
 
-    if matrix.IDENTIFIER == V1HpGeomSpace.IDENTIFIER:
+    if matrix._IDENTIFIER == V1HpGeomSpace._IDENTIFIER:
         return space_sample(
             value=to_numpy(matrix), size=size, rand_generator=rand_generator
         )
 
-    if matrix.IDENTIFIER == V1HpUniform.IDENTIFIER:
-        return dist_sample(dist.uniform, matrix.value, size, rand_generator)
+    if matrix._IDENTIFIER == V1HpUniform._IDENTIFIER:
+        return dist_sample(dist.uniform, matrix.value.to_dict(), size, rand_generator)
 
-    if matrix.IDENTIFIER == V1HpQUniform.IDENTIFIER:
-        return dist_sample(dist.quniform, matrix.value, size, rand_generator)
+    if matrix._IDENTIFIER == V1HpQUniform._IDENTIFIER:
+        return dist_sample(dist.quniform, matrix.value.to_dict(), size, rand_generator)
 
-    if matrix.IDENTIFIER == V1HpLogUniform.IDENTIFIER:
-        return dist_sample(dist.loguniform, matrix.value, size, rand_generator)
+    if matrix._IDENTIFIER == V1HpLogUniform._IDENTIFIER:
+        return dist_sample(
+            dist.loguniform, matrix.value.to_dict(), size, rand_generator
+        )
 
-    if matrix.IDENTIFIER == V1HpQLogUniform.IDENTIFIER:
-        return dist_sample(dist.qloguniform, matrix.value, size, rand_generator)
+    if matrix._IDENTIFIER == V1HpQLogUniform._IDENTIFIER:
+        return dist_sample(
+            dist.qloguniform, matrix.value.to_dict(), size, rand_generator
+        )
 
-    if matrix.IDENTIFIER == V1HpNormal.IDENTIFIER:
-        return dist_sample(dist.normal, matrix.value, size, rand_generator)
+    if matrix._IDENTIFIER == V1HpNormal._IDENTIFIER:
+        return dist_sample(dist.normal, matrix.value.to_dict(), size, rand_generator)
 
-    if matrix.IDENTIFIER == V1HpQNormal.IDENTIFIER:
-        return dist_sample(dist.qnormal, matrix.value, size, rand_generator)
+    if matrix._IDENTIFIER == V1HpQNormal._IDENTIFIER:
+        return dist_sample(dist.qnormal, matrix.value.to_dict(), size, rand_generator)
 
-    if matrix.IDENTIFIER == V1HpLogNormal.IDENTIFIER:
-        return dist_sample(dist.lognormal, matrix.value, size, rand_generator)
+    if matrix._IDENTIFIER == V1HpLogNormal._IDENTIFIER:
+        return dist_sample(dist.lognormal, matrix.value.to_dict(), size, rand_generator)
 
-    if matrix.IDENTIFIER == V1HpQLogNormal.IDENTIFIER:
-        return dist_sample(dist.qlognormal, matrix.value, size, rand_generator)
+    if matrix._IDENTIFIER == V1HpQLogNormal._IDENTIFIER:
+        return dist_sample(
+            dist.qlognormal, matrix.value.to_dict(), size, rand_generator
+        )
 
 
 def sample(matrix, size=None, rand_generator=None):
@@ -300,7 +312,10 @@ def sample(matrix, size=None, rand_generator=None):
         return _sample(matrix, size=size, rand_generator=rand_generator)
     except Exception as e:
         raise ValidationError(
-            "Could not sample from matrix value: {} for kind: {} with size: {}".format(
-                matrix.value, matrix.IDENTIFIER, size
-            )
+            [
+                "Could not sample from matrix value: {} for kind: {} with size: {}".format(
+                    matrix.value, matrix._IDENTIFIER, size
+                )
+            ],
+            matrix.__class__,
         ) from e

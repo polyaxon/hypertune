@@ -16,8 +16,6 @@
 
 import hyperopt
 
-from marshmallow import ValidationError
-
 from hypertune.matrix.utils import to_numpy
 from polyaxon.polyflow import (
     V1HpChoice,
@@ -38,68 +36,58 @@ from polyaxon.polyflow import (
 
 
 def to_hyperopt(name, matrix):
-    if matrix.IDENTIFIER in {
-        V1HpChoice.IDENTIFIER,
-        V1HpRange.IDENTIFIER,
-        V1HpLinSpace.IDENTIFIER,
-        V1HpLogSpace.IDENTIFIER,
-        V1HpGeomSpace.IDENTIFIER,
+    if matrix._IDENTIFIER in {
+        V1HpChoice._IDENTIFIER,
+        V1HpRange._IDENTIFIER,
+        V1HpLinSpace._IDENTIFIER,
+        V1HpLogSpace._IDENTIFIER,
+        V1HpGeomSpace._IDENTIFIER,
     }:
         return hyperopt.hp.choice(name, to_numpy(matrix))
 
-    if matrix.IDENTIFIER == V1HpPChoice.IDENTIFIER:
-        raise ValidationError(
-            "{} is not supported by Hyperopt.".format(matrix.IDENTIFIER)
-        )
+    if matrix._IDENTIFIER == V1HpPChoice._IDENTIFIER:
+        raise ValueError("{} is not supported by Hyperopt.".format(matrix._IDENTIFIER))
 
-    if matrix.IDENTIFIER == V1HpUniform.IDENTIFIER:
-        return hyperopt.hp.uniform(
-            name, matrix.value.get("low"), matrix.value.get("high")
-        )
+    if matrix._IDENTIFIER == V1HpUniform._IDENTIFIER:
+        return hyperopt.hp.uniform(name, matrix.value.low, matrix.value.high)
 
-    if matrix.IDENTIFIER == V1HpQUniform.IDENTIFIER:
+    if matrix._IDENTIFIER == V1HpQUniform._IDENTIFIER:
         return hyperopt.hp.quniform(
             name,
-            matrix.value.get("low"),
-            matrix.value.get("high"),
-            matrix.value.get("q"),
+            matrix.value.low,
+            matrix.value.high,
+            matrix.value.q,
         )
 
-    if matrix.IDENTIFIER == V1HpLogUniform.IDENTIFIER:
-        return hyperopt.hp.loguniform(
-            name, matrix.value.get("low"), matrix.value.get("high")
-        )
+    if matrix._IDENTIFIER == V1HpLogUniform._IDENTIFIER:
+        return hyperopt.hp.loguniform(name, matrix.value.low, matrix.value.high)
 
-    if matrix.IDENTIFIER == V1HpQLogUniform.IDENTIFIER:
+    if matrix._IDENTIFIER == V1HpQLogUniform._IDENTIFIER:
         return hyperopt.hp.qloguniform(
             name,
-            matrix.value.get("low"),
-            matrix.value.get("high"),
-            matrix.value.get("q"),
+            matrix.value.low,
+            matrix.value.high,
+            matrix.value.q,
         )
 
-    if matrix.IDENTIFIER == V1HpNormal.IDENTIFIER:
-        return hyperopt.hp.normal(
-            name, matrix.value.get("loc"), matrix.value.get("scale")
-        )
+    if matrix._IDENTIFIER == V1HpNormal._IDENTIFIER:
+        return hyperopt.hp.normal(name, matrix.value.loc, matrix.value.scale)
 
-    if matrix.IDENTIFIER == V1HpQNormal.IDENTIFIER:
+    if matrix._IDENTIFIER == V1HpQNormal._IDENTIFIER:
         return hyperopt.hp.qnormal(
             name,
-            matrix.value.get("loc"),
-            matrix.value.get("scale"),
-            matrix.value.get("q"),
+            matrix.value.loc,
+            matrix.value.scale,
+            matrix.value.q,
         )
 
-    if matrix.IDENTIFIER == V1HpLogNormal.IDENTIFIER:
-        return hyperopt.hp.lognormal(
-            name, matrix.value.get("loc"), matrix.value.get("scale")
-        )
+    if matrix._IDENTIFIER == V1HpLogNormal._IDENTIFIER:
+        return hyperopt.hp.lognormal(name, matrix.value.loc, matrix.value.scale)
 
-    if matrix.IDENTIFIER == V1HpQLogNormal.IDENTIFIER:
+    if matrix._IDENTIFIER == V1HpQLogNormal._IDENTIFIER:
         return hyperopt.hp.qlognormal(
             name,
-            matrix.value.get("loc"),
-            matrix.value.get("scale"),
-            matrix.value.get("q"),
+            matrix.value.loc,
+            matrix.value.scale,
+            matrix.value.q,
         )

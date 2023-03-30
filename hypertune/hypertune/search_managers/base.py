@@ -24,7 +24,7 @@ class BaseManager:
             raise ValueError(
                 "The current search manager `{}` is not compatible "
                 "with the search kind `{}` defined in the config.".format(
-                    self.CONFIG.IDENTIFIER, config.IDENTIFIER
+                    self.CONFIG._IDENTIFIER, config._IDENTIFIER
                 )
             )
         self.config = config

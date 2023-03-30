@@ -53,12 +53,12 @@ class HyperoptManager(BaseManager):
         for k, v in self.config.params.items():
             self._search_space[k] = to_hyperopt(k, v)
 
-            if v.IDENTIFIER in {
-                V1HpChoice.IDENTIFIER,
-                V1HpRange.IDENTIFIER,
-                V1HpLinSpace.IDENTIFIER,
-                V1HpLogSpace.IDENTIFIER,
-                V1HpGeomSpace.IDENTIFIER,
+            if v._IDENTIFIER in {
+                V1HpChoice._IDENTIFIER,
+                V1HpRange._IDENTIFIER,
+                V1HpLinSpace._IDENTIFIER,
+                V1HpLogSpace._IDENTIFIER,
+                V1HpGeomSpace._IDENTIFIER,
             }:
                 # Get the categorical/discrete values mapping
                 self._param_to_value[k] = to_numpy(v)
