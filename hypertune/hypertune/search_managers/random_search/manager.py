@@ -18,7 +18,7 @@ import copy
 
 from functools import reduce
 from operator import mul
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from hypertune.matrix.utils import get_length, sample
 from hypertune.search_managers.base import BaseManager
@@ -32,7 +32,7 @@ class RandomSearchManager(BaseManager):
 
     CONFIG = V1RandomSearch
 
-    def get_suggestions(self, params: Dict = None) -> List[Dict]:
+    def get_suggestions(self, params: Optional[Dict] = None) -> List[Dict]:
         if not self.config.num_runs:
             raise ValueError("This search strategy requires `num_runs`.")
         suggestions = []

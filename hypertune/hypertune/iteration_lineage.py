@@ -16,7 +16,7 @@
 
 import traceback
 
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from hypertune.logger import logger
 from polyaxon.client import RunClient
@@ -30,7 +30,7 @@ def get_iteration_definition(
     iteration: int,
     join: V1Join,
     optimization_metric: str,
-    name: str = None,
+    name: Optional[str] = None,
 ):
     def handler():
         runs = (

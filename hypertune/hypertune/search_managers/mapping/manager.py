@@ -16,7 +16,7 @@
 
 import copy
 
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from hypertune.search_managers.base import BaseManager
 from polyaxon.polyflow import V1Mapping
@@ -27,7 +27,7 @@ class MappingManager(BaseManager):
 
     CONFIG = V1Mapping
 
-    def get_suggestions(self, params: Dict = None) -> List[Dict]:
+    def get_suggestions(self, params: Optional[Dict] = None) -> List[Dict]:
         suggestions = []
         params = params or {}
         for v in self.config.values:
