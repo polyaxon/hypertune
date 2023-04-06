@@ -18,10 +18,11 @@ import traceback
 
 from typing import Dict, List, Optional
 
+from clipped.np_utils import sanitize_dict, sanitize_np_types
+
 from hypertune.logger import logger
 from polyaxon.client import RunClient
 from polyaxon.polyflow import V1Join
-from polyaxon.utils.np_utils import sanitize_dict, sanitize_np_types
 from traceml.artifacts import V1ArtifactKind, V1RunArtifact
 
 
