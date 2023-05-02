@@ -15,7 +15,7 @@
 # limitations under the License.
 
 NAME = "hypertune"
-VERSION = "1.1.0-rc12"
+VERSION = "1.1.0-rc13"
 DESC = "A library for performing hyperparameter optimization with Polyaxon."
 URL = "https://github.com/polyaxon/hypertune"
 AUTHOR = "Polyaxon, Inc."
