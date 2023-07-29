@@ -2,7 +2,7 @@ import numpy as np
 
 from datetime import date, datetime
 
-from pydantic import ValidationError
+from clipped.compact.pydantic import ValidationError
 
 from hypertune.matrix import dist
 from polyaxon.polyflow import (
