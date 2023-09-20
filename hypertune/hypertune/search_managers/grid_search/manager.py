@@ -4,7 +4,7 @@ from typing import Dict, List
 
 from hypertune.matrix.utils import to_numpy
 from hypertune.search_managers.base import BaseManager
-from polyaxon.polyflow import V1GridSearch
+from polyaxon.schemas import V1GridSearch
 
 
 class GridSearchManager(BaseManager):

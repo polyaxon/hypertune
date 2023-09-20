@@ -1,7 +1,7 @@
 import hyperopt
 
 from hypertune.matrix.utils import to_numpy
-from polyaxon.polyflow import (
+from polyaxon.schemas import (
     V1HpChoice,
     V1HpGeomSpace,
     V1HpLinSpace,

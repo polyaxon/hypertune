@@ -3,8 +3,8 @@ import pytest
 from unittest.mock import patch
 
 from hypertune.search_managers.random_search.manager import RandomSearchManager
-from polyaxon.polyflow.matrix import V1RandomSearch
-from polyaxon.utils.test_utils import BaseTestCase
+from polyaxon._utils.test_utils import BaseTestCase
+from polyaxon.schemas import V1RandomSearch
 
 
 @pytest.mark.tuninig_mark

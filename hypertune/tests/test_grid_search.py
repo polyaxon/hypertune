@@ -3,8 +3,8 @@ import pytest
 from unittest.mock import patch
 
 from hypertune.search_managers.grid_search.manager import GridSearchManager
-from polyaxon.polyflow.matrix import V1GridSearch
-from polyaxon.utils.test_utils import BaseTestCase
+from polyaxon._utils.test_utils import BaseTestCase
+from polyaxon.schemas import V1GridSearch
 
 
 @pytest.mark.tuninig_mark

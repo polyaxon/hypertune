@@ -10,7 +10,7 @@ from hypertune.search_managers.bayesian_optimization.manager import (
 from hypertune.search_managers.bayesian_optimization.optimizer import BOOptimizer
 from hypertune.search_managers.bayesian_optimization.space import SearchSpace
 from hypertune.search_managers.random_search.manager import RandomSearchManager
-from polyaxon.utils.test_utils import BaseTestCase
+from polyaxon._utils.test_utils import BaseTestCase
 
 
 @pytest.mark.tuninig_mark

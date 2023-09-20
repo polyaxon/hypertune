@@ -2,7 +2,7 @@ import numpy as np
 
 from hypertune.logger import logger
 from hypertune.matrix.utils import get_max, get_min, to_numpy
-from polyaxon.polyflow import V1Optimization
+from polyaxon.schemas import V1Optimization
 
 
 class SearchSpace:

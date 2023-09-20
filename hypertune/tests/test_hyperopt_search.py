@@ -3,8 +3,8 @@ import pytest
 import hyperopt
 
 from hypertune.search_managers.hyperopt.manager import HyperoptManager
-from polyaxon.polyflow.matrix.hyperopt import V1Hyperopt
-from polyaxon.utils.test_utils import BaseTestCase
+from polyaxon._utils.test_utils import BaseTestCase
+from polyaxon.schemas import V1Hyperopt
 
 
 @pytest.mark.tuninig_mark

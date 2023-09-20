@@ -1,8 +1,8 @@
 import pytest
 
 from hypertune.search_managers.hyperband.manager import HyperbandManager
-from polyaxon.polyflow.matrix import V1Hyperband
-from polyaxon.utils.test_utils import BaseTestCase
+from polyaxon._utils.test_utils import BaseTestCase
+from polyaxon.schemas import V1Hyperband
 
 
 @pytest.mark.tuninig_mark

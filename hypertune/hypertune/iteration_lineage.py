@@ -6,7 +6,7 @@ from clipped.utils.np import sanitize_dict, sanitize_np_types
 
 from hypertune.logger import logger
 from polyaxon.client import RunClient
-from polyaxon.polyflow import V1Join
+from polyaxon.schemas import V1Join
 from traceml.artifacts import V1ArtifactKind, V1RunArtifact
 
 

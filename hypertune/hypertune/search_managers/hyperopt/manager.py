@@ -6,7 +6,7 @@ from hypertune.matrix.hyperopt import to_hyperopt
 from hypertune.matrix.utils import space_get_index, to_numpy
 from hypertune.search_managers.base import BaseManager
 from hypertune.search_managers.utils import get_random_generator
-from polyaxon.polyflow import (
+from polyaxon.schemas import (
     V1HpChoice,
     V1HpGeomSpace,
     V1HpLinSpace,

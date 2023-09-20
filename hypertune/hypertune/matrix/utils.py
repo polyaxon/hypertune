@@ -5,7 +5,7 @@ from datetime import date, datetime
 from clipped.compact.pydantic import ValidationError
 
 from hypertune.matrix import dist
-from polyaxon.polyflow import (
+from polyaxon.schemas import (
     V1HpChoice,
     V1HpDateRange,
     V1HpDateTimeRange,
@@ -22,8 +22,8 @@ from polyaxon.polyflow import (
     V1HpQUniform,
     V1HpRange,
     V1HpUniform,
+    validate_pchoice,
 )
-from polyaxon.polyflow.matrix.params import validate_pchoice
 
 
 def pchoice(values, size=None, rand_generator=None):

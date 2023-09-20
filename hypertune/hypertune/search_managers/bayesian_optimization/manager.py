@@ -3,7 +3,7 @@ from typing import Dict, List
 from hypertune.search_managers.base import BaseManager
 from hypertune.search_managers.bayesian_optimization.optimizer import BOOptimizer
 from hypertune.search_managers.random_search.manager import RandomSearchManager
-from polyaxon.polyflow import V1Bayes, V1RandomSearch
+from polyaxon.schemas import V1Bayes, V1RandomSearch
 
 
 class BayesSearchManager(BaseManager):

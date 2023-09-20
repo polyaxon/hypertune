@@ -3,7 +3,7 @@ import copy
 from typing import Dict, List, Optional
 
 from hypertune.search_managers.base import BaseManager
-from polyaxon.polyflow import V1Mapping
+from polyaxon.schemas import V1Mapping
 
 
 class MappingManager(BaseManager):

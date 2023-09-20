@@ -1,8 +1,8 @@
 import pytest
 
 from hypertune.search_managers.mapping.manager import MappingManager
-from polyaxon.polyflow import V1Mapping
-from polyaxon.utils.test_utils import BaseTestCase
+from polyaxon._utils.test_utils import BaseTestCase
+from polyaxon.schemas import V1Mapping
 
 
 @pytest.mark.tuninig_mark

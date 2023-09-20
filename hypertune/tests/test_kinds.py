@@ -1,7 +1,7 @@
 import pytest
 
-from polyaxon.polyflow import V1MatrixKind
-from polyaxon.utils.test_utils import BaseTestCase
+from polyaxon._utils.test_utils import BaseTestCase
+from polyaxon.schemas import V1MatrixKind
 
 
 @pytest.mark.tuninig_mark

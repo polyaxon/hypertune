@@ -8,7 +8,7 @@ from hypertune.matrix.utils import get_length, sample
 from hypertune.search_managers.base import BaseManager
 from hypertune.search_managers.spec import SuggestionSpec
 from hypertune.search_managers.utils import get_random_generator
-from polyaxon.polyflow import V1RandomSearch
+from polyaxon.schemas import V1RandomSearch
 
 
 class RandomSearchManager(BaseManager):

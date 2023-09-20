@@ -2,7 +2,7 @@ from typing import Dict, List
 
 from hypertune.search_managers.base import BaseManager
 from hypertune.search_managers.random_search.manager import RandomSearchManager
-from polyaxon.polyflow import V1Hyperband, V1Optimization, V1RandomSearch
+from polyaxon.schemas import V1Hyperband, V1Optimization, V1RandomSearch
 
 
 class HyperbandManager(BaseManager):
