@@ -2,7 +2,7 @@ import numpy as np
 
 from datetime import date, datetime
 
-from clipped.compact.pydantic import ValidationError
+from clipped.compact.pydantic import PYDANTIC_VERSION, ValidationError
 
 from hypertune.matrix import dist
 from polyaxon.schemas import (
@@ -97,9 +97,25 @@ def get_length(matrix):
         V1HpLogNormal._IDENTIFIER,
         V1HpQLogNormal._IDENTIFIER,
     }:
-        raise ValidationError(
-            ["Distribution should not call `length`"], matrix.__class__
-        )
+        error_msg = "Distribution should not call `length`"
+        if PYDANTIC_VERSION.startswith("2."):
+            raise ValidationError.from_exception_data(
+                title="Value Error",
+                line_errors=[
+                    {
+                        "type": "value_error",
+                        "loc": ("get_length",),
+                        # Location tuple indicating where the error occurred
+                        "msg": error_msg,
+                        "input": matrix.__class__,  # The invalid input that caused the error
+                        "ctx": {"error": error_msg},
+                    }
+                ],
+            )
+        else:
+            raise ValidationError(
+                ["Distribution should not call `length`"], matrix.__class__
+            )
 
 
 def get_min(matrix):
@@ -175,13 +191,31 @@ def to_numpy(matrix):
         return matrix.value
 
     if matrix._IDENTIFIER == V1HpPChoice._IDENTIFIER:
-        raise ValidationError(  # TODO: Fix error message
-            [
-                "Distribution should not call `to_numpy`, "
-                "instead it should call `sample`."
-            ],
-            matrix.__class__,
+        error_msg = (
+            "Distribution should not call `to_numpy`, instead it should call `sample`."
         )
+        if PYDANTIC_VERSION.startswith("2."):
+            raise ValidationError.from_exception_data(
+                title="Value Error",
+                line_errors=[
+                    {
+                        "type": "value_error",
+                        "loc": ("get_length",),
+                        # Location tuple indicating where the error occurred
+                        "msg": error_msg,
+                        "input": matrix.__class__,  # The invalid input that caused the error
+                        "ctx": {"error": error_msg},
+                    }
+                ],
+            )
+        else:
+            raise ValidationError(  # TODO: Fix error message
+                [
+                    "Distribution should not call `to_numpy`, "
+                    "instead it should call `sample`."
+                ],
+                matrix.__class__,
+            )
 
     if matrix._IDENTIFIER == V1HpDateRange._IDENTIFIER:
         return np.arange(**matrix.value.to_dict()).astype(date)
@@ -211,13 +245,31 @@ def to_numpy(matrix):
         V1HpLogNormal._IDENTIFIER,
         V1HpQLogNormal._IDENTIFIER,
     }:
-        raise ValidationError(
-            [
-                "Distribution should not call `to_numpy`, "
-                "instead it should call `sample`."
-            ],
-            matrix.__class__,
+        error_msg = (
+            "Distribution should not call `to_numpy`, instead it should call `sample`."
         )
+        if PYDANTIC_VERSION.startswith("2."):
+            raise ValidationError.from_exception_data(
+                title="Value Error",
+                line_errors=[
+                    {
+                        "type": "value_error",
+                        "loc": ("get_length",),
+                        # Location tuple indicating where the error occurred
+                        "msg": error_msg,
+                        "input": matrix.__class__,  # The invalid input that caused the error
+                        "ctx": {"error": error_msg},
+                    }
+                ],
+            )
+        else:
+            raise ValidationError(
+                [
+                    "Distribution should not call `to_numpy`, "
+                    "instead it should call `sample`."
+                ],
+                matrix.__class__,
+            )
 
 
 def _sample(matrix, size=None, rand_generator=None):
@@ -295,11 +347,27 @@ def sample(matrix, size=None, rand_generator=None):
     try:
         return _sample(matrix, size=size, rand_generator=rand_generator)
     except Exception as e:
-        raise ValidationError(
-            [
-                "Could not sample from matrix value: {} for kind: {} with size: {}".format(
-                    matrix.value, matrix._IDENTIFIER, size
-                )
-            ],
-            matrix.__class__,
-        ) from e
+        error_msg = (
+            "Could not sample from matrix value: {} for kind: {} with size: {}".format(
+                matrix.value, matrix._IDENTIFIER, size
+            )
+        )
+        if PYDANTIC_VERSION.startswith("2."):
+            raise ValidationError.from_exception_data(
+                title="Value Error",
+                line_errors=[
+                    {
+                        "type": "value_error",
+                        "loc": ("get_length",),
+                        # Location tuple indicating where the error occurred
+                        "msg": error_msg,
+                        "input": matrix.__class__,  # The invalid input that caused the error
+                        "ctx": {"error": error_msg},
+                    }
+                ],
+            ) from e
+        else:
+            raise ValidationError(
+                [error_msg],
+                matrix.__class__,
+            ) from e
