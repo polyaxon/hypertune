@@ -37,7 +37,7 @@ def get_iteration_definition(
                 metrics.append(run.outputs[optimization_metric])
 
         if configs or metrics or run_uuids:
-            artifact_run = V1RunArtifact.construct(
+            artifact_run = V1RunArtifact.model_construct(
                 name=name or "in-iteration-{}".format(iteration),
                 kind=V1ArtifactKind.ITERATION,
                 summary={
