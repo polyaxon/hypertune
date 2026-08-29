@@ -21,10 +21,6 @@ class HyperoptManager(BaseManager):
     """Hyperopt search strategy manager for hyperparameter optimization."""
 
     CONFIG = V1Hyperopt
-    ALGORITHMS = {
-        "tpe": hyperopt.tpe.suggest,
-        "anneal": hyperopt.anneal.suggest,
-    }
 
     def __init__(self, config):
         super().__init__(config)
@@ -111,15 +107,11 @@ class HyperoptManager(BaseManager):
 
     def run_algorithm(self, is_first, new_ids, domain, hyperopt_trials, random_state):
         if is_first:
-            return self.ALGORITHMS[self.config.algorithm](
-                new_ids, domain, hyperopt_trials, random_state
-            )
+            return hyperopt.tpe.suggest(new_ids, domain, hyperopt_trials, random_state)
         new_trials = []
         for i in new_ids:
             new_trials.append(
-                self.ALGORITHMS[self.config.algorithm](
-                    [i], domain, hyperopt_trials, random_state
-                )[0]
+                hyperopt.tpe.suggest([i], domain, hyperopt_trials, random_state)[0]
             )
         return new_trials
 
@@ -140,7 +132,7 @@ class HyperoptManager(BaseManager):
         is_first = not all([configs, metrics])
 
         minimize = hyperopt.FMinIter(
-            self.config.algorithm,
+            hyperopt.tpe.suggest,
             hyperopt_domain,
             hyperopt_trials,
             max_evals=-1,

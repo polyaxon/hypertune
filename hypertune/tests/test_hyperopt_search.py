@@ -1,7 +1,5 @@
 import pytest
 
-import hyperopt
-
 from hypertune.search_managers.hyperopt.manager import HyperoptManager
 from polyaxon._utils.test_utils import BaseTestCase
 from polyaxon.schemas import V1Hyperopt
@@ -12,36 +10,10 @@ class TestHyperoptSearch(BaseTestCase):
     def test_hyperopt_search_config(self):
         assert HyperoptManager.CONFIG == V1Hyperopt
 
-    def test_hyperopt_algorithm(self):
-        config = V1Hyperopt.from_dict(
-            {
-                "concurrency": 2,
-                "algorithm": "anneal",
-                "numRuns": 1,
-                "metric": {"name": "loss", "optimization": "minimize"},
-                "params": {"param": {"kind": "uniform", "value": [0.01, 0.5]}},
-            }
-        )
-        manager = HyperoptManager(config)
-        assert manager.ALGORITHMS[manager.config.algorithm] == hyperopt.anneal.suggest
-
-        config = V1Hyperopt.from_dict(
-            {
-                "concurrency": 2,
-                "algorithm": "tpe",
-                "numRuns": 1,
-                "metric": {"name": "loss", "optimization": "minimize"},
-                "params": {"param": {"kind": "uniform", "value": [0.01, 0.5]}},
-            }
-        )
-        manager = HyperoptManager(config)
-        assert manager.ALGORITHMS[manager.config.algorithm] == hyperopt.tpe.suggest
-
     def test_search_space(self):
         config = V1Hyperopt.from_dict(
             {
                 "concurrency": 2,
-                "algorithm": "tpe",
                 "numRuns": 1,
                 "metric": {"name": "loss", "optimization": "minimize"},
                 "params": {
@@ -75,37 +47,10 @@ class TestHyperoptSearch(BaseTestCase):
             "param7",
         }
 
-    def test_get_anneal_suggestions(self):
-        config = V1Hyperopt.from_dict(
-            {
-                "concurrency": 2,
-                "algorithm": "anneal",
-                "numRuns": 1,  # TODO: no numRuns
-                "metric": {"name": "loss", "optimization": "minimize"},
-                "params": {
-                    "lr": {"kind": "uniform", "value": [0.01, 0.5]},
-                    "dropout": {"kind": "uniform", "value": [0.01, 0.99]},
-                    "batch": {"kind": "choice", "value": [32, 64, 126, 256]},
-                    "optimizer": {
-                        "kind": "choice",
-                        "value": ["sgd", "adagrad", "adam", "ftrl"],
-                    },
-                },
-            }
-        )
-
-        suggestion = HyperoptManager(config).get_suggestions()[0]
-
-        self.assertTrue(0.99 >= suggestion["dropout"] >= 0.01)
-        self.assertTrue(0.5 >= suggestion["lr"] >= 0.01)
-        self.assertTrue(suggestion["batch"] in [32, 64, 126, 256])
-        self.assertTrue(suggestion["optimizer"] in ["sgd", "adagrad", "adam", "ftrl"])
-
     def test_get_tpe_suggestions(self):
         config = V1Hyperopt.from_dict(
             {
                 "concurrency": 2,
-                "algorithm": "tpe",
                 "numRuns": 1,
                 "metric": {"name": "loss", "optimization": "minimize"},
                 "params": {
@@ -130,7 +75,6 @@ class TestHyperoptSearch(BaseTestCase):
         config = V1Hyperopt.from_dict(
             {
                 "concurrency": 2,
-                "algorithm": "tpe",
                 "numRuns": 10,
                 "metric": {"name": "loss", "optimization": "minimize"},
                 "params": {
