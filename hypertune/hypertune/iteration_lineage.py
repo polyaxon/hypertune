@@ -1,9 +1,7 @@
 import traceback
-
 from typing import Dict, List, Optional
 
 from clipped.utils.np import sanitize_dict, sanitize_np_types
-
 from hypertune.logger import logger
 from polyaxon.client import RunClient
 from polyaxon.schemas import V1Join

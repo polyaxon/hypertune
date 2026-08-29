@@ -1,5 +1,4 @@
 import pytest
-
 from unittest.mock import patch
 
 from hypertune.search_managers.random_search.manager import RandomSearchManager

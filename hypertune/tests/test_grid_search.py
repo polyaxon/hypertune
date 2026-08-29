@@ -1,5 +1,4 @@
 import pytest
-
 from unittest.mock import patch
 
 from hypertune.search_managers.grid_search.manager import GridSearchManager

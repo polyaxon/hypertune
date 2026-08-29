@@ -1,6 +1,5 @@
-import uuid
-
 from collections import namedtuple
+import uuid
 
 
 class SuggestionSpec(namedtuple("SuggestionSpec", "params")):

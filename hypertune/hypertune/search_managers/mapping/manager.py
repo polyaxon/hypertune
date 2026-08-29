@@ -1,5 +1,4 @@
 import copy
-
 from typing import Dict, List, Optional
 
 from hypertune.search_managers.base import BaseManager

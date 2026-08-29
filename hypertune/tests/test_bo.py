@@ -1,7 +1,6 @@
+from mock import patch
 import numpy as np
 import pytest
-
-from mock import patch
 
 from hypertune.search_managers.bayesian_optimization.manager import (
     BayesSearchManager,

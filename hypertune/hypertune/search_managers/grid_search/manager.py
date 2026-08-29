@@ -1,5 +1,4 @@
 import itertools
-
 from typing import Dict, List
 
 from hypertune.matrix.utils import to_numpy
