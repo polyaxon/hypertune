@@ -38,7 +38,6 @@ extra = {
     "dev": dev_requirements,
     "all": [
         "scikit-learn",
-        "hyperopt",
     ],
 }
 
