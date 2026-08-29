@@ -16,18 +16,6 @@ class TestHyperoptSearch(BaseTestCase):
         config = V1Hyperopt.from_dict(
             {
                 "concurrency": 2,
-                "algorithm": "rand",
-                "numRuns": 1,
-                "metric": {"name": "loss", "optimization": "minimize"},
-                "params": {"param": {"kind": "uniform", "value": [0.01, 0.5]}},
-            }
-        )
-        manager = HyperoptManager(config)
-        assert manager.ALGORITHMS[manager.config.algorithm] == hyperopt.rand.suggest
-
-        config = V1Hyperopt.from_dict(
-            {
-                "concurrency": 2,
                 "algorithm": "anneal",
                 "numRuns": 1,
                 "metric": {"name": "loss", "optimization": "minimize"},
@@ -53,7 +41,7 @@ class TestHyperoptSearch(BaseTestCase):
         config = V1Hyperopt.from_dict(
             {
                 "concurrency": 2,
-                "algorithm": "rand",
+                "algorithm": "tpe",
                 "numRuns": 1,
                 "metric": {"name": "loss", "optimization": "minimize"},
                 "params": {
@@ -86,52 +74,6 @@ class TestHyperoptSearch(BaseTestCase):
             "param6",
             "param7",
         }
-
-    def test_get_rand_suggestions(self):
-        config = V1Hyperopt.from_dict(
-            {
-                "concurrency": 2,
-                "algorithm": "rand",
-                "numRuns": 1,
-                "metric": {"name": "loss", "optimization": "minimize"},
-                "params": {
-                    "lr": {"kind": "uniform", "value": [0.01, 0.5]},
-                    "dropout": {"kind": "uniform", "value": [0.01, 0.99]},
-                    "batch": {"kind": "choice", "value": [32, 64, 126, 256]},
-                    "optimizer": {
-                        "kind": "choice",
-                        "value": ["sgd", "adagrad", "adam", "ftrl"],
-                    },
-                },
-            }
-        )
-
-        suggestion = HyperoptManager(config).get_suggestions()[0]
-
-        self.assertTrue(0.99 >= suggestion["dropout"] >= 0.01)
-        self.assertTrue(0.5 >= suggestion["lr"] >= 0.01)
-        self.assertTrue(suggestion["batch"] in [32, 64, 126, 256])
-        self.assertTrue(suggestion["optimizer"] in ["sgd", "adagrad", "adam", "ftrl"])
-
-        config = V1Hyperopt.from_dict(
-            {
-                "concurrency": 2,
-                "algorithm": "rand",
-                "numRuns": 10,
-                "metric": {"name": "loss", "optimization": "minimize"},
-                "params": {
-                    "lr": {"kind": "uniform", "value": [0.01, 0.5]},
-                    "dropout": {"kind": "uniform", "value": [0.01, 0.99]},
-                    "batch": {"kind": "choice", "value": [32, 64, 126, 256]},
-                    "optimizer": {
-                        "kind": "choice",
-                        "value": ["sgd", "adagrad", "adam", "ftrl"],
-                    },
-                },
-            }
-        )
-
-        assert len(HyperoptManager(config).get_suggestions()) == 10
 
     def test_get_anneal_suggestions(self):
         config = V1Hyperopt.from_dict(

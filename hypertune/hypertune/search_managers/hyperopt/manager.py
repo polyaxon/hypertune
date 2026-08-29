@@ -23,7 +23,6 @@ class HyperoptManager(BaseManager):
     CONFIG = V1Hyperopt
     ALGORITHMS = {
         "tpe": hyperopt.tpe.suggest,
-        "rand": hyperopt.rand.suggest,
         "anneal": hyperopt.anneal.suggest,
     }
 
@@ -111,7 +110,7 @@ class HyperoptManager(BaseManager):
         return trials
 
     def run_algorithm(self, is_first, new_ids, domain, hyperopt_trials, random_state):
-        if self.config.algorithm == "random" or is_first:
+        if is_first:
             return self.ALGORITHMS[self.config.algorithm](
                 new_ids, domain, hyperopt_trials, random_state
             )
