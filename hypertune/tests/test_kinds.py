@@ -13,6 +13,6 @@ class TestKinds(BaseTestCase):
         assert V1MatrixKind.iteration_values() == {
             V1MatrixKind.HYPERBAND,
             V1MatrixKind.BAYES,
-            V1MatrixKind.HYPEROPT,
+            V1MatrixKind.TPE,
             V1MatrixKind.ITERATIVE,
         }

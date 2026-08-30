@@ -1,14 +1,20 @@
 from typing import Dict, List
 
 from hypertune.search_managers.base import BaseManager
-from hypertune.search_managers.tpe import TPESampler
-from polyaxon.schemas import V1Hyperopt
+from hypertune.search_managers.tpe.sampler import TPESampler
+from polyaxon.schemas import V1TPE
 
 
-class HyperoptManager(BaseManager):
-    """Native TPE search manager using the legacy Hyperopt configuration name."""
+class TPEManager(BaseManager):
+    """Generate suggestions with a Tree-structured Parzen Estimator.
 
-    CONFIG = V1Hyperopt
+    TPE splits completed trials into better and worse groups, fits a probability
+    model for each parameter in both groups, and selects candidates that are more
+    likely under the better model. It uses random sampling until enough observations
+    are available.
+    """
+
+    CONFIG = V1TPE
 
     def __init__(self, config):
         super().__init__(config)
