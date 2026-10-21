@@ -1,5 +1,5 @@
 NAME = "hypertune"
-VERSION = "1.3.0"
+VERSION = "1.4.0"
 DESC = "A library for performing hyperparameter optimization with Polyaxon."
 URL = "https://github.com/polyaxon/hypertune"
 AUTHOR = "Polyaxon authors"
